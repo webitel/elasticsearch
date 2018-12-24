@@ -9,7 +9,7 @@ env:
 
 before_install:
   - git clone https://github.com/sscarduzio/elasticsearch-readonlyrest-plugin.git
-  - cd elasticsearch-readonlyrest-plugin && ./gradlew --stacktrace es63x:ror '-PesVersion=6.5.4' && ls -axF es63x/build/distributions/ && pwd && cd ..
+  - cd elasticsearch-readonlyrest-plugin && ./gradlew --stacktrace es63x:ror '-PesVersion=6.5.4' && mv es63x/build/distributions/readonlyrest-1.16.31_es6.5.4.zip ../ROR/ && cd ..
 
 install:
   - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
