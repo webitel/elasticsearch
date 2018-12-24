@@ -5,7 +5,7 @@ services:
   - docker
 
 env:
-  - DOCKER_IMAGE_NAME=webitel/kibana
+  - DOCKER_IMAGE_NAME=webitel/elasticsearch
 
 before_install:
   - git clone https://github.com/sscarduzio/elasticsearch-readonlyrest-plugin.git
