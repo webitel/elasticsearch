@@ -1,0 +1,42 @@
+readonlyrest:
+  prompt_for_basic_auth: false
+
+  access_control_rules:
+
+  - name: "::NGINX-ADMIN-GROUP-SQL::"
+    indices: ["cdr-*@{user}", "accounts-*@{user}", "<no-index>"]
+    actions: ["indices:data/read/*", "indices:data/write/*" ]
+    filter: '{"query_string":{"query":"domain_name:@{user} OR domain:@{user}"}}'
+    proxy_auth:
+      proxy_auth_config: "proxy1"
+      users: ["*"]
+    verbosity: info
+
+  - name: "::NGINX-ADMIN-GROUP::"
+    indices: [".kibana-@{user}", "cdr-*@{user}", "accounts-*@{user}", "<no-index>"]
+    actions: ["indices:data/read/*", "indices:data/write/*" ]
+    kibana_index: ".kibana-@{user}"
+    kibana_access: rw
+    proxy_auth:
+      proxy_auth_config: "proxy1"
+      users: ["*"]
+    verbosity: info
+
+  - name: "::NGINX-ROOT-GROUP::"
+    indices: ["*"]
+    actions: ["indices:data/read/*", "indices:data/write/*" ]
+    kibana_index: ".kibana"
+    kibana_access: rw
+    headers: ["x-domain:null"]
+    proxy_auth:
+      proxy_auth_config: "proxy1"
+      users: ["*"]
+    verbosity: info
+
+  - name: "::KIBANA-SRV::"
+    auth_key: kibana:kibana
+
+
+  proxy_auth_configs:
+  - name: "proxy1"
+    user_id_header: "x-domain"
