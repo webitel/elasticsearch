@@ -10,28 +10,28 @@ readonlyrest:
     proxy_auth:
       proxy_auth_config: "proxy1"
       users: ["*"]
-    verbosity: info
+    verbosity: error
 
   - name: "::NGINX-ADMIN-GROUP::"
     indices: [".kibana-@{user}", "cdr-*@{user}", "accounts-*@{user}", "<no-index>"]
     actions: ["indices:data/read/*", "indices:data/write/*" ]
     kibana_index: ".kibana-@{user}"
     kibana_access: rw
+    verbosity: error
     proxy_auth:
       proxy_auth_config: "proxy1"
       users: ["*"]
-    verbosity: info
 
   - name: "::NGINX-ROOT-GROUP::"
     indices: ["*"]
     actions: ["indices:data/read/*", "indices:data/write/*" ]
     kibana_index: ".kibana"
     kibana_access: rw
+    verbosity: error
     headers: ["x-domain:null"]
     proxy_auth:
       proxy_auth_config: "proxy1"
       users: ["*"]
-    verbosity: info
 
   - name: "::KIBANA-SRV::"
     auth_key: kibana:kibana
