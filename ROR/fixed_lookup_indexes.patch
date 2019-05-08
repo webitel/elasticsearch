@@ -1,0 +1,30 @@
+From 71014c2517dba3b94e1b1dbafc8de2f9c67d48a2 Mon Sep 17 00:00:00 2001
+From: navrotskyj <navrotskyj@gmail.com>
+Date: Wed, 8 May 2019 14:54:14 +0300
+Subject: [PATCH] fixed filter indexes
+
+---
+ es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java b/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
+index 16f7544..c53b1a5 100644
+--- a/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
++++ b/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
+@@ -573,7 +573,12 @@ public class RequestInfo implements RequestInfoShim {
+ 
+   @Override
+   public Set<String> extractAllIndicesAndAliases() {
+-    return clusterService.state().metaData().getAliasAndIndexLookup().keySet();
++    return clusterService.state().metaData().getAliasAndIndexLookup()
++            .entrySet()
++            .stream()
++            .filter(e->e.getValue().getIndices().get(0).getState() == IndexMetaData.State.OPEN || e.getValue().isAlias() )
++            .map(Map.Entry::getKey)
++            .collect(Collectors.toSet());
+   }
+ 
+   @Override
+-- 
+2.7.4
+
