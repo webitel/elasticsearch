@@ -1,0 +1,28 @@
+From ad7f6bbe90c691b4cb17a46d2765ceaec40502b8 Mon Sep 17 00:00:00 2001
+From: navrotskyj <navrotskyj@gmail.com>
+Date: Wed, 8 May 2019 17:12:30 +0300
+Subject: [PATCH] fixed filter closed index
+
+---
+ es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java b/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
+index cd38765..10bba37 100644
+--- a/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
++++ b/es63x/src/main/java/tech/beshu/ror/es/RequestInfo.java
+@@ -588,6 +588,11 @@ public class RequestInfo implements RequestInfoShim {
+     HashSet<Map.Entry<String, Set<String>>> result = Sets.newHashSet();
+     indices.keysIt().forEachRemaining(key -> {
+       IndexMetaData indexMetaData = indices.get(key);
++
++      if (indexMetaData.getState() != IndexMetaData.State.OPEN) {
++        return;
++      }
++
+       String indexName = indexMetaData.getIndex().getName();
+       Set<String> aliases = Sets.newHashSet(indexMetaData.getAliases().keysIt());
+       result.add(Maps.immutableEntry(indexName, aliases));
+-- 
+2.7.4
+
