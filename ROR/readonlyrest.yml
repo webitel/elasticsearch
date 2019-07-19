@@ -5,7 +5,6 @@ readonlyrest:
 
   - name: "::NGINX-ADMIN-GROUP-SQL::"
     indices: ["cdr-*@{user}", "accounts-*@{user}", "<no-index>"]
-    actions: ["indices:data/read/*", "indices:data/write/*" ]
     filter: '{"query_string":{"query":"domain_name:@{user} OR domain:@{user}"}}'
     verbosity: error
     proxy_auth:
@@ -14,7 +13,6 @@ readonlyrest:
 
   - name: "::NGINX-ADMIN-GROUP::"
     indices: [".kibana-@{user}", "cdr-*@{user}", "accounts-*@{user}", "<no-index>"]
-    actions: ["indices:data/read/*", "indices:data/write/*" ]
     kibana_index: ".kibana-@{user}"
     kibana_access: rw
     verbosity: error
@@ -24,7 +22,6 @@ readonlyrest:
 
   - name: "::NGINX-ROOT-GROUP::"
     indices: ["*"]
-    actions: ["indices:data/read/*", "indices:data/write/*" ]
     kibana_index: ".kibana"
     kibana_access: rw
     verbosity: error
